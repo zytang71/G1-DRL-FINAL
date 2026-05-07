@@ -3,9 +3,9 @@ import torch
 def check_feature_shapes():
     try:
         # 載入空間特徵 (CNN)
-        cnn_feat = torch.load('cnn_features_all.pt')
+        cnn_feat = torch.load('features/dji/cnn_features_all.pt')
         # 載入時間特徵 (LSTM)
-        lstm_feat = torch.load('lstm_features_all.pt')
+        lstm_feat = torch.load('features/dji/lstm_features_all.pt')
         
         print(f"--- 特徵維度檢查 ---")
         print(f"CNN 空間特徵維度 (cnn_features_all.pt): {cnn_feat.shape}")
