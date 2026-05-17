@@ -163,14 +163,14 @@ def calculate_turbulence_indices(features, window=252):
 # =================================================================
 def run_quantitative_ensemble_system():
     # A. 數據加載與特徵工程 (保持不變)
-    cnn_features = torch.load('cnn_features_all.pt', map_location='cpu', weights_only=True).numpy()
-    lstm_features = torch.load('lstm_features_all.pt', map_location='cpu', weights_only=True).numpy()
+    cnn_features = torch.load('0050/cnn_features_all.pt', map_location='cpu', weights_only=True).numpy()
+    lstm_features = torch.load('0050/lstm_features_all.pt', map_location='cpu', weights_only=True).numpy()
     features_16d = np.concatenate([cnn_features, lstm_features], axis=1)
     
     scaler = StandardScaler()
     features_16d = scaler.fit_transform(features_16d)
     
-    market_df = pd.read_csv('0050_tw.csv')
+    market_df = pd.read_csv('0050/0050_tw.csv')
     market_prices = market_df['close'].values
     
     # 計算全時段的亂流指數
