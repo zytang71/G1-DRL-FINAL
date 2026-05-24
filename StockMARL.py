@@ -10,6 +10,7 @@ from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+stock_name = "spy"
 
 # =================================================================
 # 1. 6 種對手盤定義 (Opponent Traders)
@@ -270,7 +271,7 @@ def calculate_sharpe_ratio(net_worth_history):
         return 0
     return (returns.mean() / returns.std()) * np.sqrt(252)
 
-def plot_ensemble_performance(total_trade_history, opp_trade_histories, title="StockMARL Ensemble vs Opponents"):
+def plot_ensemble_performance(total_trade_history, opp_trade_histories, title="StockMARL Ensemble vs Opponents: "+f'{stock_name}'):
     plt.figure(figsize=(14, 8))
     
     # 繪製 Ensemble 系統績效
@@ -290,22 +291,22 @@ def plot_ensemble_performance(total_trade_history, opp_trade_histories, title="S
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
-    plt.savefig('stockmarl_performance.png', dpi=300)
-    print("已儲存綜合績效走勢圖至 stockmarl_performance.png")
+    plt.savefig(f'features_and_results/{stock_name}/{stock_name}_performance.png', dpi=300)
+    print("已儲存綜合績效走勢圖為" + f'features_and_results/{stock_name}/{stock_name}_performance.png')
 
 # =================================================================
 # 5. 集成系統執行邏輯 (Ensemble Workflow)
 # =================================================================
 def run_quantitative_ensemble_system():
-    print("加載特徵與市場資料 (0050)...")
-    cnn_features = torch.load('0050/cnn_features_all.pt', map_location='cpu', weights_only=True).numpy()
-    lstm_features = torch.load('0050/lstm_features_all.pt', map_location='cpu', weights_only=True).numpy()
+    print("加載特徵與市場資料 ...")
+    cnn_features = torch.load(f'features_and_results/{stock_name}/cnn_features_all.pt', map_location='cpu', weights_only=True).numpy()
+    lstm_features = torch.load(f'features_and_results/{stock_name}/lstm_features_all.pt', map_location='cpu', weights_only=True).numpy()
     features_16d = np.concatenate([cnn_features, lstm_features], axis=1)
     
     scaler = StandardScaler()
     features_16d = scaler.fit_transform(features_16d)
     
-    market_df = pd.read_csv('0050/0050_tw.csv')
+    market_df = pd.read_csv(f'features_and_results/{stock_name}/{stock_name}.csv')
     market_prices = market_df['close'].values
     
     print("正在計算亂流指數 (Turbulence Index)...")
